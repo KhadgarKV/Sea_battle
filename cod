@@ -1,0 +1,159 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    static void rules() {    // правила заполнения
+        System.out.println();
+        System.out.println("Remember!!!" + '\n' + "In the field, the ships are filling top-down or right-left!!!" +
+                '\n' + "1-enter! - Ship 1-horizontal or 0-vertical." + '\n' + "2-enter! - Location ship.");
+    }
+
+    static void field(char[][] a) { // для облегчения заполнения кораблями, заполнение массива точками
+        for (int i = 1; i < 11; i++) {
+            for (int j = 1; j < 11; j++) {
+                a[i][j] = '.';
+            }
+        }
+    }
+
+    static void location(char[][] a) {   // для помощи игроку, расположение ячеек
+        int k = 48;
+        for (int i = 1; i < 11; i++) {
+            a[i][0] = (char) k++;
+        }
+        k = 48;
+        for (int i = 1; i < 11; i++) {
+            a[0][i] = (char) k++;
+        }
+    }
+
+    static void array_output(char[][] a) {
+        for (char[] i : a) {
+            System.out.println();
+            for (char j : i) {
+                System.out.print(j + "  ");
+            }
+        }
+        System.out.println();
+    }
+
+    static void ship(char[][] a, int h, int g) { // h - кол во кораблей, g = кол-во ячеек в корабле
+        Scanner scan = new Scanner(System.in);
+        for (int j = 0; j < h; j++) {
+            int f = scan.nextInt();  //f = 0 вертикальный корабль  f = 1 горизонтальный корабль
+            if (f == 0) {
+                int c = scan.nextInt() + 1;
+                int b = scan.nextInt() + 1;
+                for (int i = 0; i < g; i++) {
+                    a[c + i][b] = '#';
+                }
+                array_output(a);
+            } else {
+                int c = scan.nextInt() + 1;
+                int b = scan.nextInt() + 1;
+                for (int i = 0; i < g; i++) {
+                    a[c][b + i] = '#';
+                }
+                array_output(a);
+            }
+        }
+    }
+
+    static void ship_4(char[][] ar) {
+        ship(ar, 1, 4);
+    }
+
+    static void ship_3(char[][] ar) {
+        ship(ar, 2, 3);
+    }
+
+    static void ship_2(char[][] ar) {
+        ship(ar, 3, 2);
+    }
+
+    static void ship_1(char[][] ar) {
+        ship(ar, 4, 1);
+    }
+
+    static void filling(char[][] array) {      // заполнение кораблями
+        rules();
+        System.out.println("Enter one ships size 4" + '\t');
+        ship_4(array);
+        rules();
+        System.out.println("Enter two ships size 3" + '\t');
+        ship_3(array);
+        rules();
+        System.out.println("Enter three ships size 2" + '\t');
+        ship_2(array);
+        rules();
+        System.out.println("Enter four ships size 1" + '\t');
+        ship_1(array);
+    }
+
+    static void start_game(char[][] a) {
+        field(a);
+        location(a);
+        array_output(a);
+        filling(a);
+    }
+
+    static boolean check(char[][] a) {     // проверка на победу
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 11; j++) {
+                if (a[i][j] == '#') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    static void move(char[][] h, char[][] g) {   // ход игрока
+        Scanner scan = new Scanner(System.in);
+        int a = scan.nextInt() + 1;
+        int b = scan.nextInt() + 1;
+        if (h[a][b] == '#') {
+            h[a][b] = 'X';
+            g[a][b] = 'X';
+        } else {
+            g[a][b] = 'o';
+        }
+    }
+
+    public static void main(String[] args) {
+
+        char[][] first_field = new char[11][11];
+        System.out.println("Player 1");
+        start_game(first_field);
+        char[][] second_field = new char[11][11];
+        System.out.println("Player 2");
+        start_game(second_field);
+
+        char[][] for_1_player = new char[11][11];
+        location(for_1_player);
+        char[][] for_2_player = new char[11][11];
+        location(for_2_player);
+
+        for (int i = 0; i >= 0; i++) {
+            if (i % 2 == 0) {
+                System.out.println("Player 1 - your move!!!");
+                move(first_field, for_1_player);
+            }
+            if (check(first_field)) {
+                System.out.println("Player 1 - won!!!");
+                break;
+            }
+
+            if (i % 2 == 1) {
+                System.out.println("Player 2 - your move!!!");
+                move(second_field, for_2_player);
+            }
+            if (check(second_field)) {
+                System.out.println("Player 2 - won!!!");
+                break;
+            }
+        }
+    }
+}
