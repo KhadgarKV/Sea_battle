@@ -138,6 +138,7 @@ public class Main {
 
         for (int i = 0; i >= 0; i++) {
             if (i % 2 == 0) {
+                array_output(for_1_player);
                 System.out.println("Player 1 - your move!!!");
                 move(first_field, for_1_player);
             }
@@ -147,6 +148,7 @@ public class Main {
             }
 
             if (i % 2 == 1) {
+                array_output(for_2_player);
                 System.out.println("Player 2 - your move!!!");
                 move(second_field, for_2_player);
             }
